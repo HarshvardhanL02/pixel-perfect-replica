@@ -84,16 +84,15 @@
   }
 }
 
-@layer components {
-  .panel { @apply rounded-xl bg-card text-card-foreground border border-border shadow-[0_10px_30px_-12px_oklch(0.1_0.04_255/0.5)]; }
-  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none; }
-  .btn-primary { @apply btn bg-primary text-primary-foreground hover:brightness-110; }
-  .btn-outline { @apply btn border border-input bg-card text-card-foreground hover:bg-muted; }
-  .btn-ghost { @apply btn text-card-foreground hover:bg-muted; }
-  .field { @apply w-full rounded-lg border border-input bg-card px-3 py-2 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-ring; }
-  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground; }
-  .chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold; }
-  .sim-badge { @apply chip bg-warning/15 text-[oklch(0.5_0.12_70)] border border-warning/40; }
-}
+@utility panel { @apply rounded-xl bg-card text-card-foreground border border-border shadow-[0_10px_30px_-12px_oklch(0.1_0.04_255/0.5)]; }
+@utility btn-base { @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors disabled:opacity-50 disabled:pointer-events-none; }
+@utility btn-primary { @apply btn-base bg-primary text-primary-foreground hover:brightness-110; }
+@utility btn-outline { @apply btn-base border border-input bg-card text-card-foreground hover:bg-muted; }
+@utility btn-ghost { @apply btn-base text-card-foreground hover:bg-muted; }
+@utility field { @apply w-full rounded-lg border border-input bg-card px-3 py-2 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-ring; }
+@utility label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground; }
+@utility chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold; }
+@utility sim-badge { @apply chip-base bg-warning/15 text-[oklch(0.5_0.12_70)] border border-warning/40; }
+
 
 .leaflet-container { font-family: var(--font-sans); }
