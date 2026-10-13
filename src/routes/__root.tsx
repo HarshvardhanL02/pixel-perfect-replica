@@ -33,7 +33,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     // Stale chunk after a dev-server restart/redeploy: reload once to fetch fresh modules.
-    if (/Failed to fetch dynamically imported module|Importing a module script failed/i.test(String(error?.message))) {
+    if (/Failed to fetch dynamically imported module|Importing a module script failed/i.test(String((error as Error | undefined)?.message))) {
       if (!sessionStorage.getItem("chunk-reload")) {
         sessionStorage.setItem("chunk-reload", "1");
         window.location.reload();
