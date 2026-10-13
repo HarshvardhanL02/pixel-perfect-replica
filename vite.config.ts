@@ -12,4 +12,6 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Pre-bundle the lazily loaded map libs so Vite doesn't re-optimize mid-session (duplicate React crash).
+  vite: { optimizeDeps: { include: ["leaflet", "react-leaflet"] } },
 });
