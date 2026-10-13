@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Demo state lives in src/lib/store.tsx (React context); future FastAPI calls go through src/lib/api.ts — keeps backend swap in one place.
+- Leaflet maps load only via src/components/LazyMap.tsx (ClientOnly + lazy) — Leaflet breaks SSR.
