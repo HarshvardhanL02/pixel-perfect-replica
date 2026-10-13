@@ -32,17 +32,17 @@ function DeliveryPage() {
     ? { report: reports.find((r) => r.id === sel.reportId), item: inventory.find((i) => i.id === sel.itemId) }
     : { report: reports.find((r) => r.id === reportId), item: inventory.find((i) => i.id === itemId) };
   const origin = facilities.find((f) => f.id === preview.item?.facilityId);
-  const route = origin && preview.report ? [origin.coords, preview.report.coords] : undefined;
+  const route: [number, number][] | undefined = origin && preview.report ? [origin.coords, preview.report.coords] : undefined;
   const points: MapPoint[] = [
     ...(origin ? [{ id: origin.id, coords: origin.coords, kind: origin.type === "Hospital" ? ("hospital" as const) : ("bloodbank" as const), title: origin.name, detail: "Origin" }] : []),
     ...(preview.report ? [{ id: preview.report.id, coords: preview.report.coords, kind: "destination" as const, title: preview.report.id, detail: preview.report.location }] : []),
   ];
-  const km = route ? haversine(route[0], route[1]) : 0;
+  const km = origin && preview.report ? haversine(origin.coords, preview.report.coords) : 0;
   const item = inventory.find((i) => i.id === itemId);
 
-  const plan = () => {
-    if (!reportId || !item) return toast.error("Select a request and a supply.");
-    if (qty < 1 || qty > item.quantity) return toast.error(`Quantity must be 1–${item.quantity}.`);
+  const plan = (): void => {
+    if (!reportId || !item) { toast.error("Select a request and a supply."); return; }
+    if (qty < 1 || qty > item.quantity) { toast.error(`Quantity must be 1–${item.quantity}.`); return; }
     const id = createDelivery(reportId, itemId, qty);
     setSelected(id);
     toast.success(`${id} created (Pending)`);
@@ -104,7 +104,7 @@ function DeliveryPage() {
   );
 }
 
-function DroneIllustration({ status, payload }: { status?: string; payload?: string }) {
+function DroneIllustration({ status, payload }: { status?: string | undefined; payload?: string | undefined }) {
   const step = status ? DELIVERY_FLOW.indexOf(status as (typeof DELIVERY_FLOW)[number]) : -1;
   return (
     <div className="panel p-5">

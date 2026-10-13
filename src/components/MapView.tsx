@@ -18,7 +18,7 @@ const colors: Record<MapPoint["kind"], string> = {
   destination: "#f5a524",
 };
 
-export default function MapView({ points, route, height = 480 }: { points: MapPoint[]; route?: LatLng[]; height?: number }) {
+export default function MapView({ points, route, height = 480 }: { points: MapPoint[]; route?: LatLng[] | undefined; height?: number }) {
   return (
     <MapContainer center={[30.37, 78.09]} zoom={11} style={{ height, width: "100%", borderRadius: 12 }} scrollWheelZoom>
       <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

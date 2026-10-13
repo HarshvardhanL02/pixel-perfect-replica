@@ -2,7 +2,7 @@
 // Set VITE_API_BASE_URL and replace demo-store actions with these calls.
 import type { Detection, EmergencyReport } from "./types";
 
-const BASE = import.meta.env.VITE_API_BASE_URL as string | undefined;
+const BASE = import.meta.env["VITE_API_BASE_URL"] as string | undefined;
 export const backendConnected = Boolean(BASE);
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {

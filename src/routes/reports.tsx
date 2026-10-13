@@ -100,7 +100,7 @@ function ReportForm({ onClose }: { onClose: () => void }) {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     const lat = parseFloat(f.lat), lng = parseFloat(f.lng);
-    if (!f.location.trim() || !f.observations.trim() || isNaN(lat) || isNaN(lng)) return toast.error("Fill in location, observations and valid coordinates.");
+    if (!f.location.trim() || !f.observations.trim() || isNaN(lat) || isNaN(lng)) { toast.error("Fill in location, observations and valid coordinates."); return; }
     addReport({ location: f.location.trim(), observations: f.observations.trim(), priority: f.priority, source: f.source, coords: [lat, lng] });
     toast.success("Demo report added — awaiting review");
     onClose();

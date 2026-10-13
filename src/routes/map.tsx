@@ -35,7 +35,7 @@ function MapPage() {
       <div className="panel p-4">
         <div className="mb-3 flex flex-wrap gap-4 text-sm">
           {LEGEND.map((l, i) => {
-            const key = (["report", "hospital", "bloodbank", "destination"] as const)[i];
+            const key = (["report", "hospital", "bloodbank", "destination"] as const)[i] ?? "report";
             return (
               <label key={l.kind} className="flex cursor-pointer items-center gap-2">
                 <input type="checkbox" checked={show[key]} onChange={(e) => setShow({ ...show, [key]: e.target.checked })} />

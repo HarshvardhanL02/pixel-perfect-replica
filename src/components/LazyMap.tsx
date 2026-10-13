@@ -7,7 +7,7 @@ const MapView = lazy(() => import("./MapView"));
 
 export type { MapPoint };
 
-export function LazyMap(props: { points: MapPoint[]; route?: LatLng[]; height?: number }) {
+export function LazyMap(props: { points: MapPoint[]; route?: LatLng[] | undefined; height?: number }) {
   const fallback = <div className="animate-pulse rounded-xl bg-muted" style={{ height: props.height ?? 480 }} />;
   return (
     <ClientOnly fallback={fallback}>

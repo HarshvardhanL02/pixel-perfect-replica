@@ -25,7 +25,7 @@ function Detection() {
 
   const onUpload = async (file?: File) => {
     if (!file) return;
-    if (!backendConnected) return toast.info("No detection model connected yet. Configure the FastAPI backend to run real inference.");
+    if (!backendConnected) { toast.info("No detection model connected yet. Configure the FastAPI backend to run real inference."); return; }
     try { await api.detect(file, "rgb"); toast.success("Sent to model"); } catch (e) { toast.error((e as Error).message); }
   };
 

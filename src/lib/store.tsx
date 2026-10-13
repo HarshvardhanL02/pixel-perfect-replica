@@ -54,7 +54,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     advanceDelivery: (id) => {
       const d = deliveries.find((x) => x.id === id);
       if (!d) return;
-      const next = DELIVERY_FLOW[Math.min(DELIVERY_FLOW.indexOf(d.status) + 1, DELIVERY_FLOW.length - 1)];
+      const next = DELIVERY_FLOW[Math.min(DELIVERY_FLOW.indexOf(d.status) + 1, DELIVERY_FLOW.length - 1)] ?? d.status;
       if (next === d.status) return;
       setDeliveries((all) => all.map((x) => (x.id === id ? { ...x, status: next } : x)));
       log("delivery", `${id} moved to ${next}`);
