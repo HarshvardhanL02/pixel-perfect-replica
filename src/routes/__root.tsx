@@ -32,6 +32,15 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    // Stale chunk after a dev-server restart/redeploy: reload once to fetch fresh modules.
+    if (/Failed to fetch dynamically imported module|Importing a module script failed/i.test(String((error as Error | undefined)?.message))) {
+      if (!sessionStorage.getItem("chunk-reload")) {
+        sessionStorage.setItem("chunk-reload", "1");
+        window.location.reload();
+        return;
+      }
+    }
+    sessionStorage.removeItem("chunk-reload");
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
   return (
