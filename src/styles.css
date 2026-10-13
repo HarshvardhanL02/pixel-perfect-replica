@@ -92,7 +92,7 @@
 @utility field { @apply w-full rounded-lg border border-input bg-card px-3 py-2 text-sm text-card-foreground outline-none focus:ring-2 focus:ring-ring; }
 @utility label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground; }
 @utility chip { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold; }
-@utility sim-badge { @apply chip-base bg-warning/15 text-[oklch(0.5_0.12_70)] border border-warning/40; }
+@utility sim-badge { @apply chip bg-warning/15 text-[oklch(0.5_0.12_70)] border border-warning/40; }
 
 
 .leaflet-container { font-family: var(--font-sans); }
