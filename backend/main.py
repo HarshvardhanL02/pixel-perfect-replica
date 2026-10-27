@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 import os
 import time
 import math
@@ -8,7 +8,7 @@ from typing import List, Optional
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from ultralytics import YOLO
@@ -232,7 +232,9 @@ def decode_image(contents: bytes) -> np.ndarray:
         raise HTTPException(status_code=400, detail="Invalid image file or unsupported format. Please upload a valid JPG/PNG.")
     return img
 
-@app.get("/health")
+router = APIRouter()
+
+@router.get("/health")
 def health_check():
     return {
         "status": "ok",
@@ -244,7 +246,7 @@ def health_check():
         }
     }
 
-@app.post("/detect/rgb", response_model=DetectionResponse)
+@router.post("/detect/rgb", response_model=DetectionResponse)
 async def detect_rgb(file: UploadFile = File(...)):
     t0 = time.time()
     contents = await file.read()
@@ -303,7 +305,7 @@ async def detect_rgb(file: UploadFile = File(...)):
         detections=detections
     )
 
-@app.post("/detect/thermal", response_model=DetectionResponse)
+@router.post("/detect/thermal", response_model=DetectionResponse)
 async def detect_thermal(file: UploadFile = File(...)):
     t0 = time.time()
     contents = await file.read()
@@ -363,7 +365,7 @@ async def detect_thermal(file: UploadFile = File(...)):
         detections=detections
     )
 
-@app.post("/detect/person", response_model=DetectionResponse)
+@router.post("/detect/person", response_model=DetectionResponse)
 async def detect_person(file: UploadFile = File(...)):
     t0 = time.time()
     contents = await file.read()
@@ -437,6 +439,10 @@ async def detect_person(file: UploadFile = File(...)):
         inference_time_ms=elapsed_ms,
         detections=detections
     )
+
+# Mount routes at root (for direct/internal calls) and /api (for public rewrites)
+app.include_router(router)
+app.include_router(router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
