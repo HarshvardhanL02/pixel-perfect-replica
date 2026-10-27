@@ -29,9 +29,6 @@ const STORAGE_KEY = "mediresq.detectionApiUrl";
 const DEFAULT_URL = "https://infonitiate-mediresq-ai.hf.space";
 
 export function getDefaultBaseUrl(): string {
-  if (typeof process !== "undefined" && process.env?.["BACKEND_URL"]) {
-    return process.env["BACKEND_URL"];
-  }
   const envUrl = import.meta.env["VITE_DETECTION_API_URL"] as string | undefined;
   return envUrl && envUrl.trim() ? envUrl.trim() : DEFAULT_URL;
 }

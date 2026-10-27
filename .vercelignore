@@ -1,0 +1,34 @@
+# Deployment exclusions for Vercel
+# The Python AI backend is deployed on Hugging Face ZeroGPU (https://infonitiate-mediresq-ai.hf.space)
+# Exclude Python backend, Hugging Face space files, and large model weights from Vercel build
+
+# Backend & Hugging Face directories
+backend/
+hf_space/
+mediresq-ai/
+
+# Large model weight files (~6 GB)
+*.pt
+*.bin
+*.onnx
+*.weights
+*.safetensors
+
+# Python virtual environments & build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Local scripts & containers
+*.bat
+Dockerfile
+docker-compose*.yml
+
+# System & test artifacts
+coverage/
+*.log

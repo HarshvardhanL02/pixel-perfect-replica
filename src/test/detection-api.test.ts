@@ -19,16 +19,6 @@ describe("MediResQ AI Detection API Client", () => {
     expect(url).toContain("infonitiate-mediresq-ai.hf.space");
   });
 
-  it("prioritizes process.env.BACKEND_URL when injected by Vercel services binding", () => {
-    process.env["BACKEND_URL"] = "http://internal-backend:8000";
-    try {
-      const url = getDefaultBaseUrl();
-      expect(url).toBe("http://internal-backend:8000");
-    } finally {
-      delete process.env["BACKEND_URL"];
-    }
-  });
-
   it("migrates legacy localhost:8000 in localStorage to production default", () => {
     localStorage.setItem("mediresq.detectionApiUrl", "http://localhost:8000");
     const loaded = loadBaseUrl();
