@@ -1,8 +1,8 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Activity, Boxes, Cpu, FileWarning, LayoutDashboard, Map, Menu, Plane, ShieldCheck, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useStore } from "@/lib/store";
-import { backendConnected } from "@/lib/api";
+import { checkHealth } from "@/lib/detection-api";
 
 const nav = [
   { to: "/", label: "Overview", icon: LayoutDashboard },
@@ -16,9 +16,27 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [backendConnected, setBackendConnected] = useState(false);
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { role, setRole, reports } = useStore();
   const awaiting = reports.filter((r) => r.status === "Awaiting Review").length;
+
+  useEffect(() => {
+    let mounted = true;
+    const test = async () => {
+      const ok = await checkHealth();
+      if (mounted) setBackendConnected(ok);
+    };
+    test();
+    const interval = setInterval(test, 5000);
+    const onUrlChanged = () => test();
+    window.addEventListener("mediresq:api-url-changed", onUrlChanged);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+      window.removeEventListener("mediresq:api-url-changed", onUrlChanged);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen">
