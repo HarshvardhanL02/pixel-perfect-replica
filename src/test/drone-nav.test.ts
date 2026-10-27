@@ -18,7 +18,7 @@ describe("Drone Nav AI URL Validation", () => {
   });
 
   it("accepts valid http URLs for local development", () => {
-    expect(validateDroneNavUrl("http://localhost:3000")).toBe("http://localhost:3000");
+    expect(validateDroneNavUrl("http://localhost:8080")).toBe("http://localhost:8080");
   });
 
   it("strips trailing slashes from URLs", () => {

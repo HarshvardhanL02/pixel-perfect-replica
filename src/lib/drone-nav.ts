@@ -5,7 +5,7 @@
 
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 
-export const DEFAULT_DRONE_NAV_URL = "http://localhost:3000";
+export const DEFAULT_DRONE_NAV_URL = "https://infonitiate-drone-nav-ai.static.hf.space";
 
 /**
  * Validates whether a given URL string is a valid HTTP or HTTPS address.
@@ -34,7 +34,7 @@ export function validateDroneNavUrl(rawUrl: string | undefined | null): string |
 
 /**
  * Reads and validates the configured Drone Nav AI base URL from the environment.
- * Falls back to DEFAULT_DRONE_NAV_URL ("http://localhost:3000") if not configured.
+ * Falls back to DEFAULT_DRONE_NAV_URL ("https://infonitiate-drone-nav-ai.static.hf.space") if not configured.
  */
 export function getDroneNavUrl(): string {
   const envUrl = import.meta.env["VITE_DRONE_NAV_AI_URL"] as string | undefined;
