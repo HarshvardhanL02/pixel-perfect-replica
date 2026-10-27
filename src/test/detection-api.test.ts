@@ -80,9 +80,9 @@ describe("MediResQ AI Detection API Client", () => {
     expect(result.imageWidth).toBe(1024);
     expect(result.imageHeight).toBe(768);
     expect(result.detections.length).toBe(1);
-    expect(result.detections[0].label).toBe("person");
-    expect(result.detections[0].confidence).toBe(0.324);
-    expect(result.detections[0].box).toEqual({
+    expect(result.detections[0]!.label).toBe("person");
+    expect(result.detections[0]!.confidence).toBe(0.324);
+    expect(result.detections[0]!.box).toEqual({
       x1: 444.3,
       y1: 296.2,
       x2: 496.5,

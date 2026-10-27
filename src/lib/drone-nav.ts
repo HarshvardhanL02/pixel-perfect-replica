@@ -1,11 +1,11 @@
-import { toast } from "sonner";
-
 /**
  * Service and helper layer for linking the external Drone Nav AI application.
  * Reads configuration strictly from environment variables without hardcoded secrets.
  */
 
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
+
+export const DEFAULT_DRONE_NAV_URL = "http://localhost:3000";
 
 /**
  * Validates whether a given URL string is a valid HTTP or HTTPS address.
@@ -34,32 +34,26 @@ export function validateDroneNavUrl(rawUrl: string | undefined | null): string |
 
 /**
  * Reads and validates the configured Drone Nav AI base URL from the environment.
+ * Falls back to DEFAULT_DRONE_NAV_URL ("http://localhost:3000") if not configured.
  */
-export function getDroneNavUrl(): string | null {
+export function getDroneNavUrl(): string {
   const envUrl = import.meta.env["VITE_DRONE_NAV_AI_URL"] as string | undefined;
-  return validateDroneNavUrl(envUrl);
+  return validateDroneNavUrl(envUrl) ?? DEFAULT_DRONE_NAV_URL;
 }
 
 /**
- * Checks whether Drone Nav AI has a valid configured URL.
+ * Checks whether Drone Nav AI has a valid configured URL in the environment.
  */
 export function isDroneNavConfigured(): boolean {
-  return getDroneNavUrl() !== null;
+  const envUrl = import.meta.env["VITE_DRONE_NAV_AI_URL"] as string | undefined;
+  return validateDroneNavUrl(envUrl) !== null;
 }
 
 /**
- * Opens the external Drone Nav AI mission application in a secure new tab.
- * Displays a graceful notification if the application URL is not configured.
+ * Programmatic helper to open the external Drone Nav AI mission application in a secure new tab.
  */
 export function openDroneNavAI(): boolean {
   const targetUrl = getDroneNavUrl();
-
-  if (!targetUrl) {
-    toast.error("Drone Nav AI is not configured.", {
-      description: "Set VITE_DRONE_NAV_AI_URL in your environment or .env file.",
-    });
-    return false;
-  }
 
   if (typeof window !== "undefined") {
     window.open(targetUrl, "_blank", "noopener,noreferrer");

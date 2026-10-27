@@ -1,18 +1,11 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { toast } from "sonner";
 import {
+  DEFAULT_DRONE_NAV_URL,
   getDroneNavUrl,
   isDroneNavConfigured,
   openDroneNavAI,
   validateDroneNavUrl,
 } from "@/lib/drone-nav";
-
-vi.mock("sonner", () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
 
 describe("Drone Nav AI URL Validation", () => {
   it("accepts valid https URLs", () => {
@@ -50,30 +43,39 @@ describe("Drone Nav AI URL Validation", () => {
   });
 });
 
-describe("Drone Nav AI Open Helper", () => {
+describe("Drone Nav AI URL Resolution and Helpers", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("shows an error toast and returns false when URL is unconfigured", () => {
+  it("resolves default fallback URL when environment variable is unset", () => {
     const originalEnv = import.meta.env["VITE_DRONE_NAV_AI_URL"];
     delete import.meta.env["VITE_DRONE_NAV_AI_URL"];
 
-    const result = openDroneNavAI();
-    expect(result).toBe(false);
-    expect(toast.error).toHaveBeenCalledWith(
-      "Drone Nav AI is not configured.",
-      expect.objectContaining({
-        description: expect.stringContaining("VITE_DRONE_NAV_AI_URL"),
-      }),
-    );
+    expect(isDroneNavConfigured()).toBe(false);
+    expect(getDroneNavUrl()).toBe(DEFAULT_DRONE_NAV_URL);
 
     if (originalEnv) {
       import.meta.env["VITE_DRONE_NAV_AI_URL"] = originalEnv;
     }
   });
 
-  it("calls window.open with secure flags when URL is configured", () => {
+  it("resolves configured environment variable URL when valid", () => {
+    const originalEnv = import.meta.env["VITE_DRONE_NAV_AI_URL"];
+    import.meta.env["VITE_DRONE_NAV_AI_URL"] = "https://drone.example.com";
+
+    expect(isDroneNavConfigured()).toBe(true);
+    expect(getDroneNavUrl()).toBe("https://drone.example.com");
+
+    if (originalEnv) {
+      import.meta.env["VITE_DRONE_NAV_AI_URL"] = originalEnv;
+    } else {
+      delete import.meta.env["VITE_DRONE_NAV_AI_URL"];
+    }
+  });
+
+  it("calls window.open with secure flags when openDroneNavAI is invoked", () => {
+    const originalEnv = import.meta.env["VITE_DRONE_NAV_AI_URL"];
     import.meta.env["VITE_DRONE_NAV_AI_URL"] = "https://drone.example.com";
     const windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
 
@@ -86,6 +88,10 @@ describe("Drone Nav AI Open Helper", () => {
     );
 
     windowOpenSpy.mockRestore();
-    delete import.meta.env["VITE_DRONE_NAV_AI_URL"];
+    if (originalEnv) {
+      import.meta.env["VITE_DRONE_NAV_AI_URL"] = originalEnv;
+    } else {
+      delete import.meta.env["VITE_DRONE_NAV_AI_URL"];
+    }
   });
 });

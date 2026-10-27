@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { LazyMap, type MapPoint } from "@/components/LazyMap";
 import { DeliveryBadge, EmptyState, PageHeader } from "@/components/ui-bits";
 import { facilities } from "@/lib/demo-data";
-import { isDroneNavConfigured, openDroneNavAI } from "@/lib/drone-nav";
+import { getDroneNavUrl, isDroneNavConfigured } from "@/lib/drone-nav";
 import { DELIVERY_FLOW, useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/delivery")({
@@ -33,6 +33,7 @@ function DeliveryPage() {
   const [itemId, setItemId] = useState("");
   const [qty, setQty] = useState(1);
   const [selected, setSelected] = useState<string | null>(deliveries[0]?.id ?? null);
+  const droneNavUrl = getDroneNavUrl();
 
   const sel = deliveries.find((d) => d.id === selected);
   const preview = sel
@@ -191,16 +192,17 @@ function DeliveryPage() {
                 </span>
               )}
             </div>
-            <button
-              type="button"
+            <a
+              href={droneNavUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-outline px-3 py-1.5 text-xs font-semibold"
-              onClick={() => openDroneNavAI()}
               title="Open Drone Nav AI"
             >
               <Navigation className="h-3.5 w-3.5 text-primary" />
               Open Drone Nav AI
               <ArrowUpRight className="h-3 w-3 opacity-70" />
-            </button>
+            </a>
           </div>
           <LazyMap points={points} route={route} height={400} />
           <h3 className="mb-2 mt-6 font-bold">Deliveries</h3>
@@ -308,6 +310,7 @@ function DroneOperationsCard({
   targetLocation?: string | null;
 }) {
   const configured = isDroneNavConfigured();
+  const droneNavUrl = getDroneNavUrl();
 
   return (
     <div className="panel space-y-4 p-5">
@@ -347,17 +350,18 @@ function DroneOperationsCard({
         </div>
       )}
 
-      <button
-        type="button"
+      <a
+        href={droneNavUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         className="btn-primary w-full justify-between"
-        onClick={() => openDroneNavAI()}
       >
         <span className="flex items-center gap-2">
           <Plane className="h-4 w-4" />
           Open Drone Nav AI
         </span>
         <ArrowUpRight className="h-4 w-4 opacity-80" />
-      </button>
+      </a>
 
       {!configured && (
         <p className="text-[11px] text-muted-foreground">
